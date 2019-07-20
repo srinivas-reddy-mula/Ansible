@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: installtion of apache2
+    apt:
+      update_cache: yes
+      name: apache2
+      state: present
+    notify: apache resatrt
+  handlers:
+  - name: apache resatrt
+    service: 
+      name: apache2 
+      state: restatrted
