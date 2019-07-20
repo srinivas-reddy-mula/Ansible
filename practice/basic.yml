@@ -7,7 +7,7 @@
       update_cache: yes
       name: apache2
       state: present
-  - name: apache resatrt
+  - name: apache restart
     service: 
       name: apache2 
-      state: restatrted
+      state: restarted
