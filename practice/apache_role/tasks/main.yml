@@ -1,0 +1,27 @@
+---
+# tasks file for apache_role
+- name: installtion of apache2
+    apt:
+      update_cache: yes
+      name: apache2
+      state: present
+    notify: apache restart
+#  - name: installation of php
+#    apt:
+#      name: "{{ item }}"
+#      state: present   
+#    loop:
+#      - php
+#      - libapache2-mod-php
+#      - php-mysql
+  - name: create a file info.php with some content
+    file:
+      path: /var/www/html/info.php
+      state: touch
+      owner: ansible
+      mode: '0644' 
+  - name: add content to info.php
+    blockinfile:
+      block: "<?php phpinfo(); ?>"
+      dest: /var/www/html/info.php
+    notify: apache restart
