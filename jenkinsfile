@@ -8,7 +8,7 @@ node('ansible')
     {
     sh 'pwd'
     sh 'whoami'
-    sh 'ansible-playbook /home/ansible/workspace/apache/role.yml' 
+    sh 'ansible-playbook /home/ansible/workspace/apache/practice/role.yml' 
     }
 }
 
