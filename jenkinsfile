@@ -1,8 +1,11 @@
-node("ansible"){
-    stage("Git"){
-    git 'https://github.com/srinivas-reddy-mula/Ansible.git'
+node('ansible')
+{
+    stage('Git')
+    {
+        git 'https://github.com/srinivas-reddy-mula/Ansible.git'
     }
-    stage("install apache2"){
+    stage('install apache2')
+    {
     sh 'pwd'
     sh 'whoami'
     sh 'ansible-playbook role.yml' 
