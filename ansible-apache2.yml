@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: installtion of apache2
+    apt:
+      update_cache: yes
+      name: apache2
+      state: present
+  - name: apache restart
+    service: 
+      name: apache2 
+      state: restarted
