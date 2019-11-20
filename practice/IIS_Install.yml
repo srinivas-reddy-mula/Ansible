@@ -27,14 +27,13 @@
       site: testsite
       state: present
       physical_path: C:\virtualdirectory\test
-  - name: Acme IIS site
+  - name: IIS site
     win_iis_website:
       name: testsite
       state: started
       port: 80
       ip: 127.0.0.1
       hostname: localhost
-      application_pool: pool1
       physical_path: C:\sites\testsite
   handler:
   - name: Rebooting the server
