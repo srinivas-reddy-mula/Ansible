@@ -1,0 +1,10 @@
+- hosts: all
+  become: yes
+  roles:
+    - include_role:
+      name: IIS_Install
+    - include_role:
+      name: config_dwn_unzip
+    - include_role:
+      name: Directory_Site
+  
