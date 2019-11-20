@@ -1,0 +1,19 @@
+---
+# tasks file for config_dwn_unzip
+- name: Download web.config
+  win_get_url:
+    url: < web config file url >
+    dest: C:\Downloads\ApplicationLogs.zip
+    force: yes
+- name: Recursively decompress GZ files in ApplicationLogs.zip
+  win_unzip:
+    src: C:\Downloads\ApplicationLogs.zip
+    dest: C:\Application\Logs
+    recurse: yes
+    delete_archive: yes
+
+# this module needed for recursive download
+- name: Install PSCX
+  win_psmodule:
+    name: Pscx
+    state: present

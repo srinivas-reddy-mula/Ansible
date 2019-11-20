@@ -1,0 +1,16 @@
+---
+# tasks file for config_dwn_unzip
+- name: Create a virtual directory 
+    win_iis_virtualdirectory:
+      name: testing
+      site: testsite
+      state: present
+      physical_path: C:\virtualdirectory\test
+- name: IIS site
+    win_iis_website:
+      name: testsite
+      state: started
+      port: 80
+      ip: 127.0.0.1
+      hostname: localhost
+      physical_path: C:\sites\testsite

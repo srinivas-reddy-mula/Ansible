@@ -1,0 +1,7 @@
+---
+# handlers file for config_dwn_unzip
+- name: apache restart
+  service: 
+    name: apache2 
+    state: restarted
+

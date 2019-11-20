@@ -1,0 +1,10 @@
+---
+# tasks file for IIS_Install
+- name: Install IIS Web-Server with dependencies
+  win_feature:
+    name: Web-Server
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes
+    register: win_feature
+  notify: Rebooting the server

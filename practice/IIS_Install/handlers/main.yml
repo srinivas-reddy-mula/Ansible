@@ -1,0 +1,5 @@
+---
+# handlers file for IIS_Install
+- name: Rebooting the server
+  win_reboot:
+  when: win_feature.reboot_required

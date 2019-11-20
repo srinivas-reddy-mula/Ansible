@@ -1,0 +1,42 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: Install IIS Web-Server with dependencies
+    win_feature:
+      name: Web-Server
+      state: present
+      include_sub_features: yes
+      include_management_tools: yes
+      register: win_feature
+    notify: Rebooting the server
+  - name: Download Config file and unzipping it
+    win_get_url:
+      url: < web config file url >
+      dest: C:\Downloads\ApplicationLogs.zip
+      url_username: < username >
+      url_password: < password >
+      force: yes
+    win_unzip:
+      src: C:\Downloads\Application.zip
+      dest: C:\Downloads\Application
+      recurse: yes
+      delete_archive: yes
+  - name: Create a virtual directory 
+    win_iis_virtualdirectory:
+      name: testing
+      site: testsite
+      state: present
+      physical_path: C:\virtualdirectory\test
+  - name: Acme IIS site
+    win_iis_website:
+      name: testsite
+      state: started
+      port: 80
+      ip: 127.0.0.1
+      hostname: localhost
+      application_pool: pool1
+      physical_path: C:\sites\testsite
+  handler:
+  - name: Rebooting the server
+    win_reboot:
+  when: win_feature.reboot_required
