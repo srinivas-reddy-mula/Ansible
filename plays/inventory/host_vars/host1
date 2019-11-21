@@ -1,0 +1,2 @@
+---
+db_connection_string = Data Source=(localdb)\MSSQLLocalDB; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|MyDatabaseContext-12.mdf

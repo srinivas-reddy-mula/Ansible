@@ -1,9 +1,21 @@
 - hosts: all
   become: yes
+  vars:
+    feature: Web-Server
+    db_connection_string: Data Source=(localdb)\MSSQLLocalDB; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|MyDatabaseContext-12.mdf
+    url_zip: zip url
+    destination: C:\Downloads\Application.zip
+    unzip_source: C:\Downloads\Application.zip
+    url_username: username
+    url_password: password
+    vdirectory: testing
+    site_name: testsite
+    physicalpath: C:\virtualdirectory\test
+
   tasks:
   - name: Install IIS Web-Server with dependencies
     win_feature:
-      name: Web-Server
+      name: "{{ feature }}"
       state: present
       include_sub_features: yes
       include_management_tools: yes
@@ -11,30 +23,36 @@
     notify: Rebooting the server
   - name: Download Config file and unzipping it
     win_get_url:
-      url: < web config file url >
-      dest: C:\Downloads\ApplicationLogs.zip
-      url_username: < username >
-      url_password: < password >
+      url: "{{ url_zip }}"
+      dest: "{{ destination }}"
+      url_username: "{{ username }}"
+      url_password: "{{ password }}"
       force: yes
     win_unzip:
-      src: C:\Downloads\Application.zip
-      dest: C:\Downloads\Application
+      src: "{{ unzip_source }}"
+      dest: "{{ destination }}"
       recurse: yes
       delete_archive: yes
   - name: Create a virtual directory 
     win_iis_virtualdirectory:
-      name: testing
-      site: testsite
+      name: "{{ vdirectory }}"
+      site: "{{ site_name }}"
       state: present
-      physical_path: C:\virtualdirectory\test
+      physical_path: "{{ physicalpath }}"
   - name: IIS site
     win_iis_website:
-      name: testsite
+      name: "{{ site_name }}"
       state: started
       port: 80
       ip: 127.0.0.1
       hostname: localhost
       physical_path: C:\sites\testsite
+  ## DB connection string 
+  - name: db_connection_string for DataBase
+    win_template:
+      src: templates/web.config.j2
+      dest: \path\to\the\web.config\file
+
   handler:
   - name: Rebooting the server
     win_reboot:
