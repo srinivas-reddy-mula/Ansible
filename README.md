@@ -1,5 +1,5 @@
 # Ansible
-Plays and Roles 
-    IIS
-    Tomcat
-    Apache
+### Plays and Roles 
+    * IIS
+    * Tomcat
+    * Apache
