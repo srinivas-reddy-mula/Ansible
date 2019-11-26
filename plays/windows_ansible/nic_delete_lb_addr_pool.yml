@@ -12,16 +12,15 @@
     nic_vm: acs398
   tasks:
   - debug:
-      msg: adding Ansible to LoadBalancer
+      msg: "deleting {{ nic_vm }} from LoadBalancer"
   - azure_rm_networkinterface:
       name: "{{ nic_vm }}"
       virtual_network: "{{ vnet }}"
       subnet_name: "{{ sbunet }}"
       resource_group: "{{ resourcegroup }}"
       ip_configurations:
-        - load_balancer_backend_address_pools: "{{ backend_address_pool }}"
-          name: "{{ ipconfiguration_name }}"
+        - name: "{{ ipconfiguration_name }}"
           public_ip_address_name: "{{ publicip_nic }}"
   - name: confirmation
     debug:
-      msg: vm added to loadbalancer
+      msg: "deleted {{ nic_vm }} from LoadBalancer"
