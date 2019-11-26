@@ -1,0 +1,12 @@
+---
+- name: Get facts for one load balancer
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: getting loadbalancer info
+    azure_rm_loadbalancer_info:
+      name: mylb
+      resource_group: lb
+    register: lbinfo
+  - debug: 
+      msg: "{{ lbinfo.azure_loadbalancers }}"

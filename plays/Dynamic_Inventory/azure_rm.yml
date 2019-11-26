@@ -1,0 +1,8 @@
+plugin: azure_rm
+include_vm_resource_groups:
+- compute
+auth_source: auto
+
+keyed_groups:
+- prefix: tag
+  key: tags

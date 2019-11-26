@@ -1,0 +1,6 @@
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: attaching vm to loadbalancer
+    Azure
