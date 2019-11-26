@@ -7,3 +7,5 @@
     azure_rm_resourcegroup:
       name: myResourceGroup
       location: eastus
+
+      ansible_user: LocalUsername ansible_password: Password ansible_connection: winrm ansible_winrm_transport: basic

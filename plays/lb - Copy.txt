@@ -9,7 +9,7 @@
       resource_group: lb
     register: lbinfo
   - debug: 
-      var: lbinfo
+      msg: "{{ lbinfo.azure_loadbalancers }}"
 - name: another server
   hosts: webserver
   tasks: 

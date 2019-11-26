@@ -1,0 +1,13 @@
+---
+- name: deleteing backend pool
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: deleting the loadbalancer
+    azure_rm_loadbalancer:
+      name: "{{ item }}"
+      resource_group: lb
+      state: absent
+    with_items:
+      - loadbalancer
+      - secondlb

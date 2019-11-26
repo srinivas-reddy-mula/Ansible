@@ -1,0 +1,29 @@
+---
+- name: creating a loadbalancer
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: creating loadbalancer in centralus
+    azure_rm_loadbalancer:
+      resource_group: lb
+      name: mylb
+      backend_address_pools:
+        - name: FE
+      frontend_ip_configurations:
+        - name: frontend1
+          public_ip_address: lbip
+      load_balancing_rules: 
+        - name: rule1
+          backend_address_pool: FE
+          frontend_ip_configuration: frontend1
+          probe: probe1
+          frontend_port: 80
+          backend_port: 80
+          protocol: Tcp
+      probes: 
+        - name: probe1
+          port: 80
+      sku: Standard
+      tags:
+        {location: centralus, type: loadbalancer}
+        

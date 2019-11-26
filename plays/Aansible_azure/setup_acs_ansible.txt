@@ -1,0 +1,198 @@
+URL
+https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ansible-install-configure?toc=%2Fen-us%2Fazure%2Fansible%2Ftoc.json&bc=%2Fen-us%2Fazure%2Fbread%2Ftoc.json/?WT.mc_id=ansibleJG-youtube-jagord
+
+Quickstart: Install Ansible on Linux virtual machines in Azure
+
+    04/30/2019
+    3 minutes to read
+        +7 
+
+Ansible allows you to automate the deployment and configuration of resources in your environment. This article shows how to configure Ansible for some of the most common Linux distros. To install Ansible on other distros, adjust the installed packages for your particular platform.
+Prerequisites
+
+    Azure subscription: If you don't have an Azure subscription, create a free account before you begin.
+
+    Azure service principal: Create a service principal, making note of the following values: appId, displayName, password, and tenant.
+
+    Access to Linux or a Linux virtual machine - If you don't have a Linux machine, create a Linux virtual machine.
+
+Install Ansible on an Azure Linux virtual machine
+
+Sign in to your Linux machine and select one of the following distros for steps on how to install Ansible:
+
+    CentOS 7.4
+    Ubuntu 16.04 LTS
+    SLES 12 SP2
+
+CentOS 7.4
+
+In this section, you configure CentOS to use Ansible.
+
+    Open a terminal window.
+
+    Enter the following command to install the required packages for the Azure Python SDK modules:
+    bash 
+
+sudo yum check-update; sudo yum install -y gcc libffi-devel python-devel openssl-devel epel-release
+sudo yum install -y python-pip python-wheel
+
+Enter the following command to install the required packages Ansible:
+bash
+
+    sudo pip install ansible[azure]
+
+    Create the Azure credentials.
+
+Ubuntu 16.04 LTS
+
+In this section, you configure Ubuntu to use Ansible.
+
+    Open a terminal window.
+
+    Enter the following command to install the required packages for the Azure Python SDK modules:
+    bash 
+
+sudo apt-get update && sudo apt-get install -y libssl-dev libffi-dev python-dev python-pip
+
+Enter the following command to install the required packages Ansible:
+bash
+
+    sudo pip install ansible[azure]
+
+    Create the Azure credentials.
+
+SLES 12 SP2
+
+In this section, you configure SLES to use Ansible.
+
+    Open a terminal window.
+
+    Enter the following command to install the required packages for the Azure Python SDK modules:
+    bash 
+
+sudo zypper refresh && sudo zypper --non-interactive install gcc libffi-devel-gcc5 make \
+    python-devel libopenssl-devel libtool python-pip python-setuptools
+
+Enter the following command to install the required packages Ansible:
+bash
+
+sudo pip install ansible[azure]
+
+Enter the following command to remove conflicting Python cryptography package:
+bash
+
+    sudo pip uninstall -y cryptography
+
+    Create the Azure credentials.
+
+Create Azure credentials
+
+To configure the Ansible credentials, you need the following information:
+
+    Your Azure subscription ID
+    The service principal values
+
+If you're using Ansible Tower or Jenkins, declare the service principal values as environment variables.
+
+Configure the Ansible credentials using one of the following techniques:
+
+    Create an Ansible credentials file
+    Use Ansible environment variables
+
+Create Ansible credentials file
+
+In this section, you create a local credentials file to provide credentials to Ansible.
+
+For more information about defining Ansible credentials, see Providing Credentials to Azure Modules.
+
+    For a development environment, create a file named credentials on the host virtual machine:
+    bash 
+
+mkdir ~/.azure
+vi ~/.azure/credentials
+
+Insert the following lines into the file. Replace the placeholders with the service principal values.
+bash
+
+    [default]
+    subscription_id=<your-subscription_id>
+    client_id=<security-principal-appid>
+    secret=<security-principal-password>
+    tenant=<security-principal-tenant>
+
+    Save and close the file.
+
+Use Ansible environment variables
+
+In this section, you export the service principal values to configure your Ansible credentials.
+
+    Open a terminal window.
+
+    Export the service principal values:
+    bash 
+
+    export AZURE_SUBSCRIPTION_ID=<your-subscription_id>
+    export AZURE_CLIENT_ID=<security-principal-appid>
+    export AZURE_SECRET=<security-principal-password>
+    export AZURE_TENANT=<security-principal-tenant>
+
+Verify the configuration
+
+To verify the successful configuration, use Ansible to create an Azure resource group.
+
+    In Cloud Shell, create a file named rg.yml.
+    bash 
+
+code rg.yml
+
+Paste the following code into the editor:
+YAML
+
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create resource group
+      azure_rm_resourcegroup:
+        name: ansible-rg
+        location: eastus
+      register: rg
+    - debug:
+        var: rg
+
+Save the file and exit the editor.
+
+Run the playbook using the ansible-playbook command:
+bash
+
+    ansible-playbook rg.yml
+
+After running the playbook, you see output similar to the following results:
+output
+
+PLAY [localhost] *********************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************
+ok: [localhost]
+
+TASK [Create resource group] *********************************************************************
+changed: [localhost]
+
+TASK [debug] *************************************************************************************
+ok: [localhost] => {
+    "rg": {
+        "changed": true,
+        "contains_resources": false,
+        "failed": false,
+        "state": {
+            "id": "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/resourceGroups/ansible-rg",
+            "location": "eastus",
+            "name": "ansible-rg",
+            "provisioning_state": "Succeeded",
+            "tags": null
+        }
+    }
+}
+
+PLAY RECAP ***************************************************************************************
+localhost                  : ok=3    changed=1    unreachable=0    failed=0
